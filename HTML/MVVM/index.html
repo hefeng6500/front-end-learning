@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+
+  <div id="app">
+    <div>a的值： {{a.a}}</div>
+    <div>b的值： {{b}}</div>
+  </div>
+  <script src="./mvvm.js"></script>
+  <script>
+
+
+    var arr = []
+    Object.defineProperty(arr, 0, {
+      get(){
+        return '拿到了'
+      },
+      set(val){
+        arr[0] = val
+      }
+    })
+
+
+
+    var app = new Vue({
+      el: '#app',
+      data: {
+        a: [1,2,3],
+        b: {
+          c: 1
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>

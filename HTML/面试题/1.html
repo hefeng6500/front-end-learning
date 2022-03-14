@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+
+
+<body>
+
+  <div class="test" id="AAA"></div>
+  <div class="test"></div>
+  <div class="test"></div>
+  <script>
+    // function add(x, y, z) {
+    //   return function (y) {
+    //     return function (z) {
+    //       return x + y + z
+    //     }
+    //   }
+    // }
+    // console.log(add(1,2,3))
+
+    // Function.prototype.bind = function (ctx, ...args) {
+    //   let _this = this
+    //   return function (...innerArgs) {
+    //     _this.call(ctx,...innerArgs, ...args)
+    //   }
+    // }
+
+    // function test(...args) {
+    //   console.log(args)
+    //   console.log(this)
+    // }
+    // var obj = {
+
+    // }
+    // test.bind(obj, 1,2,3)(999,888)
+
+    // let sanmao = new Dog('三毛')
+    // 1.像普通函数执行一样，形成一个私有的作用域，形参赋值，变量提升
+    // 2.默认创建一个对象，让函数中的this执行这个对象，这个对象就是当前类的实例
+    // 3.代码执行
+    // 4.默认把创建的对象返回
+
+    // function _new(Fn, ...arg) {
+      
+    // }
+
+    // var sanmao = _new(Dog, '三毛')
+    // sanmao.bark()
+    // sanmao.sayName()
+    // console.log(sanmao instanceof Dog)
+
+    function test(name) {
+      console.log(this.a)
+    }
+
+    Function.prototype.bind = function (context, ...args) {
+      this.call(context, ...args)     
+    }
+    let obj = {
+      a: 'a'
+    }
+    test.bind(obj, 1, 2)
+  </script>
+</body>
+
+</html>

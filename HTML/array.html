@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    var routes = [
+      {path: '/a', name: 'aa'},
+      {path: '/b', name: 'bb'},
+      {path: '/c', name: 'cc'}
+    ]
+
+    var roleRoute = [
+      {path: '/a'}
+    ]
+
+    // function filterRouter(roleRoute, routes) {
+    //   const res = []
+    //   roleRoute.forEach(route => {
+    //     // routes.some(item => item.path === route.path&&res.push(item))
+    //     res.push(...(routes.filter(v => route.path===v.path)  ))
+    //   })
+    //   return res
+    // }
+
+    // const a = filterRouter(roleRoute, routes)
+    // console.log(a)
+
+    function filterArr(arr1, arr2) {
+      const tmp = []
+      // arr1.forEach(item1 => {
+      //   arr2.forEach(item2 => {
+      //     if(item1.path === item2.path){
+      //       tmp.push(item2)
+      //     }
+      //   })
+      // });
+      arr1.forEach(item => {
+        arr2.filter(v => v.path === item.path && tmp.push(v) )
+      });
+      
+      return tmp
+    }
+
+    const a = filterArr(roleRoute, routes)
+    console.log(a)
+  </script>
+</body>
+</html>

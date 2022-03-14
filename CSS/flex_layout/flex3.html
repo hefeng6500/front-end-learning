@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Flex</title>
+  <style>
+    .container{
+      display: flex;
+			flex-flow: row wrap;
+			
+      justify-content: space-between;
+			/* align-content: center; */
+			align-items: center;
+			
+      height: 400px;
+      background: #ddd;
+    }
+    .item{
+      width: 100px;
+      height: 50px;
+      background: #cc00ff;
+    }
+		.item1{
+			
+		}
+		.item2{
+			margin: 0 20px;
+			/* flex: 1; */
+			/* flex: auto; */
+			/* flex: 1 1 auto; */
+			
+			
+			/* flex: 0 1 auto;  */
+			/* flex: none; */
+			/* flex: 0 0 auto; */
+		}
+		.item3{
+			
+			/* align-self: flex-start; */
+		}
+  </style>
+</head>
+<body>
+  <h1>弹性布局</h1>
+  <hr>
+	<p>flex: none | [ <'flex-grow'> <'flex-shrink'>? || <'flex-basis'> ]</p>
+	<p>
+		flex-grow: 属性定义项目的放大比例，默认为0，即如果存在剩余空间，也不放大。
+	</p>
+	<p>
+		flex-shrink属性定义了项目的缩小比例，默认为1，即如果空间不足，该项目将缩小。
+	</p>
+	<p>
+		flex-basis属性定义了在分配多余空间之前，项目占据的主轴空间（main size）。浏览器根据这个属性，计算主轴是否有多余空间。它的默认值为auto，即项目的本来大小。
+	</p>
+	<hr>
+  <p>flex属性是flex-grow, flex-shrink 和 flex-basis的简写，默认值为<b>0 1 auto</b>。后两个属性可选</p>
+	<p>该属性有两个快捷值：auto (1 1 auto) 和 none (0 0 auto</p>
+	
+	<p>
+		align-self属性允许单个项目有与其他项目不一样的对齐方式，可覆盖align-items属性。默认值为auto，表示继承父元素的align-items属性，如果没有父元素，则等同于stretch。
+	</p>
+	<div class="container">
+    <div class="item item1">1</div>
+    <div class="item item2">2</div>
+    <div class="item item3">3</div>
+  </div>
+</body>
+</html>

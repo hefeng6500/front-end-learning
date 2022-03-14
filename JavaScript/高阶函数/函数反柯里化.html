@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>函数反柯里化</title>
+</head>
+
+<body>
+  <script>
+
+    /*
+
+    反柯里化的思想与柯里化正好相反，如果说柯里化的过程是将函数拆分成功能更具体化的函数，那反柯里化的作用则在于扩大函数的适用性，使本来作为特定对象所拥有的功能函数可以被任意对象所使用。
+
+    反柯里化通用式的参数为一个希望可以被其他对象调用的方法或函数，通过调用通用式返回一个函数，这个函数的第一个参数为要执行方法的对象，后面的参数为执行这个方法时需要传递的参数。
+    
+    */
+
+
+
+    // 定义反柯里化函数
+    function uncurring(fn) {
+      return function () {
+        var obj = Array.prototype.shift.call(arguments)
+        return fn.apply(obj, arguments)
+      }
+    }
+
+    // 直接将反柯里化函数定义在函数的原型上
+    Function.prototype.unCurrying = function () {
+      const self = this
+      return function () {
+        return Function.prototype.call.apply(self, arguments)
+      }
+    }
+
+    /*
+      上述两种写法有些差别： 一个是独立反柯里化函数，一个是定义在函数原型上的反柯里化函数
+      前者使用的 shift() 可以将作用域移出来，
+      后者借用apply把要借用的函数作为this环境赋给call，并传入之后的形参作为参数执行
+      前者 shift() 移除的第一项恰好与后者 call() 第一个参数的值相同，简直异曲同工之妙
+      
+
+    */
+
+    // 除了上面两种玩法还可以这样，牛逼闪闪
+    Function.prototype.unCurrying = function () {
+      return this.call.bind(this)
+    }
+
+    // 示例一：
+    // 构造函数 F
+    function F() { }
+    // 拼接属性值的方法
+    F.prototype.concatProps = function () {
+      let args = Array.from(arguments);
+      return args.reduce((prev, next) => `${this[prev]}&${this[next]}`);
+    }
+    // 使用 concatProps 的对象
+    let obj = {
+      name: "Panda",
+      age: 16
+    };
+    // 使用反柯里化进行转化
+    let concatProps = F.prototype.concatProps.unCurrying();
+    console.log(concatProps(obj, "name", "age")) // 'Panda&16'
+
+    // 示例二：将 Object.prototype.toString 扩展到 window 上直接使用
+    let toString = Object.prototype.toString.unCurrying()
+    console.log(toString(1)) // '[object Number]'
+
+
+
+
+
+
+
+
+
+
+
+
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>js高级进阶——手动实现深拷贝函数</title>
+</head>
+
+<body>
+  <script>
+    // // 考点：数据类型校验， 循环引用
+    // function deepClone(data, hash = new WeakMap) {
+    //   if (data == undefined) return data;
+    //   if (typeof data !== 'object') return data;
+    //   if (data instanceof RegExp) return new RegExp(data)
+    //   if (data instanceof Date) return new Date(data)
+
+    //   var v = hash.get(data)
+    //   if (v) return v
+
+    //   var instance = new data.constructor
+    //   hash.set(data, instance)
+    //   for (var key in data) {
+    //     if (data.hasOwnProperty(key)) {
+    //       instance[key] = deepClone(data[key], hash)
+    //     }
+    //   }
+    //   return instance
+    // }
+
+    // var a = {
+    //   name: 'bob',
+    //   desc: {
+    //     age: 12
+    //   }
+    // }
+
+    // var b = deepClone(a)
+    // b.desc.age = 100
+    // console.log(b)
+    // console.log(a)
+
+    // // js循环引用
+    // var t = {}
+    // t.t = t
+    // console.log(deepClone(t))
+
+    let testObj = {
+      date: new Date(),
+      unde: undefined,
+      nul: null,
+      sym: Symbol(1),
+      reg: new RegExp(/^[0-9]{0,6}$/), 
+      fun: function test(val) {
+        alert(val)
+      }
+    }
+    testObj[Symbol("a")] = 'a'
+
+
+    console.log(JSON.parse(JSON.stringify(testObj)))
+
+    
+
+
+    function cloneDeep(obj, map = new WeakMap()) {
+        if (obj == null) {
+            return obj;
+        }
+        debugger
+        if (map.has(obj)) {
+          console.log(map.get(obj))
+            return map.get(obj);
+        }
+
+        const result = Array.isArray(obj) ? [] : {};
+        map.set(obj, result);
+
+        const symbols = Object.getOwnPropertySymbols(obj);
+        for (let s of symbols) {
+            if (typeof obj[s] == 'object') {
+                result[s] = cloneDeep(obj[s], map);
+            } else {
+                result[s] = obj[s];
+            }
+        }
+
+        for (var key in obj) {
+            if (obj.hasOwnProperty(key)) {
+                if (typeof obj[key] == 'object') {
+                  let data = cloneDeep(obj[key], map)
+                  console.log(data)
+                    result[key] = data;
+                } else {
+                    result[key] = obj[key];
+                }
+            }
+        }
+
+        return result;
+    }
+
+    var a = {}
+    a.a =a
+    // console.log(cloneDeep(a))
+
+
+    function find(list, fn) {
+      return list.filter(fn)[0]
+    }
+
+    function deepCopy(obj, cache = []){
+      if(obj === null || typeof obj !== 'object'){
+        return obj
+      }
+
+      const hit = find(cache, v => v.original === obj)
+      if(hit){
+        return hit.copy
+      }
+
+      const copy = Array.isArray(obj) ? [] : {}
+
+      cache.push({
+        original: obj,
+        copy
+      })
+
+      Object.keys(obj).forEach(key => {
+        copy[key] = deepCopy(obj[key], cache)
+      })
+      return copy
+    }
+
+    console.log(deepCopy(a))
+
+
+  </script>
+</body>
+
+</html>

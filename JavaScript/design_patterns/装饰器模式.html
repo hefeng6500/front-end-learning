@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>装饰器模式</title>
+</head>
+
+<body>
+  <script>
+    // var Plane = function () {}
+    // Plane.prototype.fire = function () {
+    //   console.log('发射普通子弹');
+    // }
+    // var MissileDecorator = function (plane) {
+    //   this.plane = plane;
+    // }
+    // MissileDecorator.prototype.fire = function () {
+    //   this.plane.fire();
+    //   console.log('发射导弹');
+    // }
+    // var AtomDecorator = function (plane) {
+    //   this.plane = plane;
+    // }
+    // AtomDecorator.prototype.fire = function () {
+    //   this.plane.fire();
+    //   console.log('发射原子弹');
+    // }
+
+    // var plane = new Plane();
+    // plane = new MissileDecorator(plane);
+    // plane = new AtomDecorator(plane);
+    // plane.fire(); // 发射普通子弹、发射导弹、发射原子弹
+
+    // window.onload = function () {
+    //   console.log(1)
+    // }
+
+    // // 假设需要在原有的 window.onload 上再添加一些功能（不修改原有 window.onload 函数）
+    // var _onload = window.onload
+    // window.onload = function () {
+    //   console.log('添加的新功能')
+    //   _onload()
+    // }
+
+    Function.prototype.before = function (fn) {
+      var self = this
+      return function () {
+        fn.apply(this, arguments)
+        return self.apply(this, arguments)
+      }
+    }
+
+    Function.prototype.after = function (fn) {
+      var self = this
+      return function () {
+        var result = self.apply(this, arguments)
+        fn.apply(this, arguments)
+        return result
+      }
+    }
+
+    function bar() {
+      console.log('是谁在昭明书院风度翩翩')
+    }
+    var foo = bar.before(function () {
+      console.log('是谁在逢源桥上惊鸿一现')
+    }).after(function () {
+      console.log('小桥流水')
+    })
+
+    foo()
+
+
+    var ajax = function (type, url, param) {
+      console.log(param); // 发送ajax 请求的代码略
+    };
+    var getToken = function () {
+      return 'Token';
+    }
+    Function.prototype.before = function (fn) {
+      var self = this
+      return function () {
+        fn.apply(this, arguments)
+        return self.apply(this, arguments)
+      }
+    }
+    ajax = ajax.before(function (type, url, param) {
+      param.Token = getToken();
+    });
+    ajax('get', 'http:// xxx.com/userinfo', {
+      name: 'sven'
+    });
+  </script>
+</body>
+
+</html>

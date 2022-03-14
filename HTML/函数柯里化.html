@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>函数柯里化</title>
+</head>
+
+<body>
+  <script>
+    function curringCheck(reg) {
+      return function (text) {
+        return reg.test(text)
+      }
+    }
+
+    var hasNumber = curringCheck(/\d+/g)
+    var hasLetter = curringCheck(/[a-z]+/g)
+
+    // console.log(hasNumber(123))
+    // console.log(hasLetter(12))
+
+
+    var currying = function (fn) {
+      var args = Array.prototype.slice.call(arguments, 1)
+      return function () {
+        var newargs = args.concat(Array.prototype.slice.call(arguments))
+        return fn.apply(this, newargs)
+      }
+    }
+
+    // 初步封装
+    // var currying = function (fn) {
+    //   debugger
+    //   // args 获取第一个方法内的全部参数
+    //   var args = Array.prototype.slice.call(arguments, 1)
+    //   return function () {
+    //     debugger
+    //     // 将后面方法里的全部参数和args进行合并
+    //     var newArgs = args.concat(Array.prototype.slice.call(arguments))
+    //     // 把合并后的参数通过apply作为fn的参数并执行
+    //     return fn.apply(this, newArgs)
+    //   }
+    // }
+
+    function test() {
+      console.log(arguments)
+    }
+    var check = currying(test, 1, 2)
+    check(3, 4)
+  </script>
+</body>
+
+</html>

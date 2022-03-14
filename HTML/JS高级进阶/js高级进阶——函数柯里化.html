@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>js高级进阶——函数柯里化</title>
+</head>
+
+<body>
+  <script>
+    // let isType = function (content, type) {
+    //   return Object.prototype.toString.call(content, type) === `[object ${type}]`
+    // }
+
+    // console.log(isType('hello', 'String'))
+    // console.log(isType(1, 'Number'))
+    // console.log(isType({}, 'Object'))
+    // console.log(isType([], 'Array'))
+
+    // 函数柯里化，属性私有化
+    // let isType = function (type) {
+    //   return function (content) {
+    //     return Object.prototype.toString.call(content, type) === `[object ${type}]`
+    //   }
+    // }
+
+    // let isString = isType('String')
+    // let isNumber = isType('Number')
+    // let isArray = isType('Array')
+    // let isObject = isType('Object')
+
+    // console.log(isString('hello'))
+    // console.log(isObject({}))
+    // console.log(isNumber(1))
+
+    // let util = {}
+    // let typeArray = ['String', 'Number', 'Array', 'Object']
+    // typeArray.forEach(type=>{
+    //   util['is' + type] = isType(type)
+    // })
+
+    // console.log(util.isString('hello'))
+    // console.log(util.isObject({}))
+    // console.log(util.isNumber(1))
+
+    let isType = function (content, type) {
+      return Object.prototype.toString.call(content, type) === `[object ${type}]`
+    }
+
+    function currying(fn, type) {
+      return function (param) {
+        return fn(param, type)
+      }
+    }
+
+    let isString = currying(isType, 'String')
+    let isNumber = currying(isType, 'Number')
+    console.log(isString('hello'))
+    console.log(isNumber(1))
+
+
+
+    function add(a, b, c, d) {
+      return a + b + c + d
+    }
+
+    function currying(fn, ...rest) {
+      let args = rest;
+      if (args.length === 4) {
+        return fn.apply(null, args);
+      } else {
+        return function (...innerRest) {
+          let finalRest = args.concat(innerRest)
+          return currying(fn, ...finalRest)
+        }
+      }
+    }
+
+    console.log(currying(add)(1)(2, 3)(4))
+
+    
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>策略模式</title>
+</head>
+
+<body>
+
+  <html>
+
+  <body>
+
+    https://app.gitbook.com/@2443992009/s/web-fullstack/she-ji-mo-shi/ce-lve-mo-shi
+
+    <form action="http:// xxx.com/register" id="registerForm" method="post">
+      请输入用户名：<input type="text" name="userName" />
+      请输入密码：<input type="text" name="password" />
+      请输入手机号码：<input type="text" name="phoneNumber" />
+      <button>提交</button>
+    </form>
+
+    <script>
+      // 根据工资发年终奖
+      let calculateBonus = function (performanceLevel, salary) {
+        if (performanceLevel === 'S') {
+          return salary * 4
+        }
+        if (performanceLevel === 'A') {
+          return salary * 3
+        }
+        if (performanceLevel === 'B') {
+          return salary * 2
+        }
+      }
+
+      console.log(calculateBonus('S', 10000))
+      console.log(calculateBonus('A', 8000))
+      console.log(calculateBonus('B', 6000))
+
+      // 如上所述的代码风格就很零散，若是再加一个等级C，就需要再加一层if else，这是深入函数内部进行操作，违背开放-封闭原则
+
+      // 基于强类型语言的设计模式进，可以这个类算法封装为一个 "策略类" ;
+      // 再封装一个类使用上述策略类
+      let PerformanceS = function () {}
+      PerformanceS.prototype.calculate = function (salary) {
+        return salary * 4
+      }
+
+      let PerformanceA = function () {}
+      PerformanceA.prototype.calculate = function (salary) {
+        return salary * 3
+      }
+
+      let PerformanceB = function () {}
+      PerformanceB.prototype.calculate = function (salary) {
+        return salary * 2
+      }
+
+      let Bonus = function (strategy, salary) {
+        this.salary = salary
+        this.strategy = strategy
+      }
+      Bonus.prototype.setSalary = function (salary) {
+        this.salary = salary
+      }
+      Bonus.prototype.setStrategy = function (strategy) {
+        this.strategy = strategy
+      }
+      Bonus.prototype.getBonus = function () {
+        return this.strategy.calculate(this.salary)
+      }
+
+      let bonus1 = new Bonus(new PerformanceS(), 10000)
+      let bonus2 = new Bonus(new PerformanceA(), 8000)
+      let bonus3 = new Bonus(new PerformanceB(), 6000)
+      console.log(bonus1.getBonus())
+      console.log(bonus2.getBonus())
+      console.log(bonus3.getBonus())
+
+      // 使用javascript版本呢？封装一个策略，并使用这个策略
+      let strategies = {
+        S: function (salary) {
+          return salary * 4
+        },
+        A: function (salary) {
+          return salary * 3
+        },
+        B: function (salary) {
+          return salary * 2
+        }
+      }
+
+      function getBonus(level, salary) {
+        return strategies[level](salary)
+      }
+      console.log(getBonus('S', 10000))
+      console.log(getBonus('A', 8000))
+      console.log(getBonus('B', 6000))
+
+
+      // 传统表单验证代码：
+      let registerForm = document.getElementById('registerForm')
+      registerForm.onsubmit = function () {
+        if (registerForm.userName.value === '') {
+          alert('用户名不能为空')
+          return false
+        }
+        if (registerForm.password.length < 6) {
+          alert('密码长度不能少于 6 位')
+          return false
+        }
+        if (!/(^1[35789]\d{9}$)/.test(registerForm.phoneNumber.value)) {
+          alert('手机号码格式不正确')
+          return false
+        }
+      }
+
+      // 缺点同上：
+      // registerForm函数庞大，大量的if else,；
+      // 若是要增加一个验证，必然要在函数registerForm复制粘贴一部分代码；
+      // 算法复用性差： 如果在程序中增加了另外一个表单，这个表单也需要进行一些类似的校验，那我们很可能将这些校验逻辑复制得漫天遍野
+
+      // 创建策略类
+      let strategies = {
+        isNonEmpty: function (val, errMsg) {
+          if (value === '') {
+            return errorMsg;
+          }
+        },
+        minLength: function (value, length, errorMsg) {
+          if (value.length < length) {
+            return errorMsg;
+          }
+        },
+        isMobile: function (value, errorMsg) {
+          if (!/(^1[35789]\d{9}$)/.test(value)) {
+            return errorMsg;
+          }
+        }
+      }
+
+      function Validator() {
+        this.cache = []
+      }
+      Validator.prototype.add = function (dom, rule, errorMsg) {
+        let array = rule.split(':')
+        this.cache.push(function () {
+          var strategy = array.shift()
+          ary.unshift(dom.value)
+          ary.push(errorMsg)
+          return strategies[strategy].apply(dom, ary);
+        })
+      }
+      Validator.prototype.start = function () {
+        for (var i = 0, validatorFunc; validatorFunc = this.cache[i++];) {
+          var msg = validatorFunc(); // 开始校验，并取得校验后的返回信息
+          if (msg) { // 如果有确切的返回值，说明校验没有通过
+            return msg;
+          }
+        }
+      }
+
+      let registerForm = document.getElementById('registerForm')
+      let validataFunc = function () {
+        let validator = new Validator()
+        validator.add(registerForm.userName, 'isNonEmpty', '用户名不能为空')
+        validator.add(registerForm.password, 'minLength:6', '密码长度不能少于 6 位')
+        validator.add(registerForm.phoneNumber, 'isNonEmpty', '手机号码格式不正确')
+
+        let errorMsg = validator.start()
+        return errorMsg
+      }
+      registerForm.onsubmit = function () {
+        let errorMsg = validataFunc()
+        if (errorMsg) {
+          alert(errorMsg)
+          return false
+        }
+      }
+    </script>
+  </body>
+
+  </html>

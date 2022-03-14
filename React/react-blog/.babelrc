@@ -1,0 +1,5 @@
+// .babelrc
+{
+  "presets" : ['es2015']
+ }
+ 

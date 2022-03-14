@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 快速排序
+    // 思路，取出中间的数字，其他的数字与其比较，小的放左，大的放右，递归调用
+    function quickSort(arr) {
+      if (arr.length <= 1) {
+        return arr
+      }
+      let middleIndex = Math.floor(arr.length / 2)
+      let middle = arr.splice(middleIndex, 1)
+
+      let left = []
+      let right = []
+      for (let i = 0; i < arr.length; i++) {
+        if (arr[i] < middle) {
+          left.push(arr[i])
+        } else {
+          right.push(arr[i])
+        }
+      }
+      return quickSort(left).concat(middle, quickSort(right))
+    }
+
+    var arr = [20, 56, 1, 26, 69, 19, 50, 41, 38, 100]
+    console.log(quickSort(arr))
+  </script>
+</body>
+
+</html>

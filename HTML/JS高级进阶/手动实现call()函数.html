@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>js高级进阶——手动实现call()函数</title>
+</head>
+
+<body>
+  <script>
+    // 首先看下原生的js的call()
+    var obj = {
+      name: 'Nicholas S.Zakas',
+      age: 41,
+      from: 'America',
+      getName: function (prefix) {
+        console.log(prefix + this.name)
+        // return (prefix + this.name)
+      }
+    }
+
+    var obj2 = {
+      name: 'Evan You',
+      age: '35',
+      from: 'China'
+    }
+
+    obj.getName.call(obj2, 'hello, everyone, i am ') // hello, everyone, i am Evan You
+
+    // call()做了什么?
+    // 1、将调用call的函数的this指向call函数的第一个参数
+    // 2、将call()第一个参数后的参数作为调用call函数的形参
+    Function.prototype._call = function (context = window) {
+      var args = [].slice.apply(arguments, [1])
+      var result
+      if (args.length < 1) {
+        context.fn()
+      } else {
+        context.fn = this
+        result = context.fn(...args)
+      }
+      delete context.fn
+      return result
+    }
+
+    // 不使用apply函数的实现
+    Function.prototype._newCall = function (context = window) {
+      var args = []
+      var result
+      context.fn = this
+      for (var i = 1; i < arguments.length; i++) {
+        args.push('arguments[' + i + ']')
+      }
+      if (args.length < 1) {
+        context.fn()
+      } else {
+        result = eval('context.fn(' + args + ')')
+      }
+      delete context.fn
+      return result
+    }
+
+    obj.getName._newCall(obj2, 'hello, everyone, i am ') // hello, everyone, i am Evan You
+
+    // ECMAScript6 的实现
+    Function.prototype._es6Call = function (context = window, ...args) {
+      let result
+      context.fn = this
+      if (args.length < 1) {
+        context.fn()
+      } else {
+        let result = context.fn(...args)
+      }
+      delete context.fn
+      return result
+    }
+
+    obj.getName._es6Call(obj2, 'hello, everyone, i am ') // hello, everyone, i am Evan You
+  </script>
+</body>
+
+</html>

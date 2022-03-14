@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>js高级进阶——手动实现new操作符</title>
+</head>
+
+<body>
+  <script>
+    function Animal(name, age) {
+      this.name = name
+      this.age = age
+      // return {}
+    }
+
+    Animal.prototype.sayName = function () {
+      console.log("Hello Everyone, I am " + this.name)
+    }
+
+    var dog = new Animal('bob', 5)
+    dog.sayName() // Hello Everyone, I am bob 
+    console.log(dog instanceof Animal) // true
+
+    // object instanceof constructor; instanceof 运算符用来检测 constructor.prototype 是否存在于参数 object 的原型链
+
+    // new关键字我们用函数来实现它的功能，因为js无法操作js底层关键字
+    // new关键字做了什么？
+    // 1、创建了一个对象
+    // 2、创建的实例对象的原型上继承了构造函数的原型对象
+    // 3、将构造函数this上的属性挂载到新创建的对象上（新创建的对象作为this的上下文）
+    // 4、如果构造函数没有返回对象，则返回新创建的对象；如果有返回新对象，那么new之后返回的就是新对象
+
+    function _new(fn) {
+      var args = [].slice.apply(arguments, [1])
+      var obj = {}
+      Object.setPrototypeOf(obj, fn.prototype)
+      var result = fn.apply(obj, args)
+      return result instanceof Object ? result : obj
+    }
+
+    var cat = _new(Animal, 'alice', 3)
+    cat.sayName() // Hello Everyone, I am alice
+    console.log(cat instanceof Animal) // true
+
+    // ECMAScript6的实现
+    function _es6new(fn, ...args) {
+      let obj = Object.create(fn.prototype)
+      let result = fn.call(obj, ...args)
+      return result instanceof Object ? result : obj
+    }
+
+    var rabbit = _es6new(Animal, 'pace', 4)
+    rabbit.sayName() // Hello Everyone, I am pace
+    console.log(rabbit instanceof Animal) // true
+
+  </script>
+</body>
+
+</html>

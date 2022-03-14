@@ -1,0 +1,76 @@
+.header {
+    width: 100%;
+    height: 52px;
+    line-height: 52px;
+    background-color: #fff;
+}
+
+.logo {
+    width: 120px;
+    height: 100%;
+    line-height: 50px;
+    font-weight: bold;
+    background: rgba(255, 255, 255, .2);
+    float: left;
+}
+
+.has-team-news {
+    top: -7px;
+}
+.user-box{
+    float: right;
+}
+.search-box{
+    margin-right: 10px;
+    display: inline-block;
+    line-height: unset;
+    float: right;
+}
+
+.ant-carousel .slick-slide {
+    text-align: center;
+    height: 160px;
+    line-height: 160px;
+    background: #364d79;
+    overflow: hidden;
+  }
+  
+  .ant-carousel .slick-slide h3 {
+    color: #fff;
+  }
+  .top-switch{
+      margin-top: 10px;
+  }
+  .top-switch a{
+    font-size: 12px
+  }
+  .top-switch-2 {
+    float: right;
+    overflow: hidden;
+    width: 100px;
+    height: 20px;
+    line-height: 20px;
+    margin-top: 10px
+  }
+  .article-title{
+    margin-bottom: 10px;
+  }
+  .post-meta{
+    font-style: italic;
+  }
+  .meta-span{
+    margin-right: 10px;
+  }
+  .icon{
+    margin-right: 2px;
+  }
+  .article-desc{
+    margin: 14px 0;
+    font-size: 16px;
+  }
+  .tags{
+    margin-top: 10px;
+  }
+  .hot-tag .ant-tag{
+    margin: 0 10px 10px 0;
+  }

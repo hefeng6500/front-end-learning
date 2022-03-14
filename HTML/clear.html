@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style lang="">
+    .d0{
+      border: 1px solid blue;
+    }
+    .d1{
+      float: left;
+      width: 100px;
+      height: 100px;
+      background: red;
+    }
+    .d2{
+      clear: both;
+    }
+  </style>
+</head>
+<body>
+  
+
+  <div class="d0">
+    <div class="d1"></div>
+    <div class="d2">1212</div>
+  </div>
+
+  <script>
+    function a(params) {
+      let num = 0
+      return function b(){
+        console.log(num)
+      }
+    }
+    let c = a()
+    c()
+  </script>
+</body>
+</html>

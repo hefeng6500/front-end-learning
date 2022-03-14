@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>三栏布局-弹性布局</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    html,
+    body {
+      height: 100%;
+    }
+
+    .container {
+      display: flex;
+      height: 100%;
+    }
+
+    .left {
+      /* flex-shrink : 默认值是 1,表示空间不足允许收缩。设置为0，空间不足也不允许收缩 */
+      flex-shrink: 0;
+      width: 300px;
+      height: 100%;
+      background: red;
+    }
+
+    .center {
+      flex: 1;
+      background: green;
+    }
+
+    .right {
+      flex-shrink: 0;
+      width: 300px;
+      height: 100%;
+      background: blue;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="left"></div>
+    <div class="center"></div>
+    <div class="right"></div>
+  </div>
+</body>
+
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>js高级进阶——手动实现bind()函数</title>
+</head>
+
+<body>
+  <script>
+    var name = 'Evan You'
+    var obj = {
+      name: 'Nicholas S.Zakas'
+    }
+
+    function test(name) {
+      console.log('i am ' + this.name)
+    }
+
+    test() // Evan You
+
+    Function.prototype._bind = function (context = window) {
+      if (typeof this !== 'function') {
+        return;
+      }
+      var args = [].slice.apply(arguments, [1])
+      var _this = this
+      return function () {
+        var innerArgs = [].slice.call(arguments)
+        _this.apply(context, args.concat(innerArgs))
+      }
+    }
+
+    test._bind(obj, 'America', 'English')(1, 2, 3, 4) // i am Nicholas S.Zakas
+
+    // ECMAScript6
+    Function.prototype._es6bind = function (context = window, ...outerArgs) {
+      if (typeof this !== 'function') return;
+      return (...innerArgs) => this.apply(context, outerArgs.concat(innerArgs))
+    }
+
+    test._es6bind(obj, 'America', 'English')(1, 2, 3, 4) // i am Nicholas S.Zakas
+    
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>发布订阅模式</title>
+</head>
+
+<body>
+  <script>
+    // 发布订阅模式：
+    // 
+    let Event = (function () {
+      let clientList = {}
+      let listen;
+      let trigger;
+      let remove;
+
+      listen = function (key, fn) {
+        if (!clientList[key]) {
+          clientList[key] = []
+        }
+        clientList[key].push(fn)
+      }
+
+      trigger = function () {
+        let key = Array.prototype.shift.call(arguments);
+        let fns = clientList[key]
+        if (!fns || fns.length === 0) {
+          return false
+        }
+        for (let i = 0, fn; fn = fns[i++];) {
+          console.log(this)
+          fn.apply(this, arguments)
+        }
+      }
+
+      remove = function (key, fn) {
+        let fns = clientList[key]
+        if (!fns) {
+          return false
+        }
+        if (!fn) {
+          fns && (fns.length = 0)
+        }
+
+        for (let i = 0; i < fns.length; i++) {
+          if (fn === fns[i]) {
+            fns.splice(i, 1)
+          }
+        }
+      }
+
+      return {
+        listen,
+        trigger,
+        remove
+      }
+    })()
+    let fn1 = function (price) {
+      console.log(`价格${price}`)
+    }
+    Event.listen('square88', fn1)
+    // Event.remove('square88', fn1)
+
+    Event.trigger('square88', 2000000)
+
+  </script>
+</body>
+
+</html>

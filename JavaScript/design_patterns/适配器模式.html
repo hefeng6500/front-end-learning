@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>适配器模式</title>
+</head>
+
+<body>
+  <script>
+    var googleMap = {
+      show: function () {
+        console.log('开始渲染google地图')
+      }
+    }
+
+    var baiduMap = {
+      show: function () {
+        console.log('开始渲染baidu地图')
+      }
+    }
+
+    var renderMap = function (map) {
+      if (map.show instanceof Function) {
+        map.show()
+      }
+    }
+
+    renderMap(googleMap)
+    renderMap(baiduMap)
+
+    var googleMap = {
+      show: function () {
+        console.log('开始渲染google地图')
+      }
+    }
+
+    var baiduMap = {
+      display: function () {
+        console.log('开始渲染baidu地图')
+      }
+    }
+
+    var baiduMapAdapter = {
+      show: function () {
+        return baiduMap.display()
+      }
+    }
+    var renderMap = function (map) {
+      if (map.show instanceof Function) {
+        map.show()
+      }
+    }
+    renderMap(googleMap)
+    renderMap(baiduMapAdapter)
+  </script>
+</body>
+
+</html>

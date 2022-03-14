@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+
+
+    var Type = {}
+
+    for(var i=0, type; type=['String', 'Array', 'Number'][i++];){
+      (function (type) {
+        Type['is'+type] = function (obj) {
+          return Object.prototype.toString.call(obj) === '[object ' + type + ']'
+        }
+      })(type)
+    }
+
+    console.log(Type.isArray([]))
+    console.log(Type.isString('str'))
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+{
+  "name": "large-number-calculate",
+  "version": "1.0.1",
+  "description": "A plugin use large number calculate",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack",
+    "prepublish": "webpack",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "large",
+    "number"
+  ],
+  "author": "hefeng6500",
+  "license": "ISC",
+  "homepage": "https://github.com/hefeng6500/web-test/tree/master/webpack/large-number-calculate/",
+  "devDependencies": {
+    "terser-webpack-plugin": "^2.3.5",
+    "webpack": "^4.42.0",
+    "webpack-cli": "^3.3.11"
+  }
+}

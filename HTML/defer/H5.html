@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <!-- <script defer src="./example1.js"></script>
+  <script defer src="./example2.js"></script> -->
+  <script defer>
+    console.log("inside");
+  </script>
+</head>
+
+<body>
+  Hello World!
+  <p>
+    defer 属性在 HTML5 中，特点如下：
+    <ul>
+      <li> 
+        <b>立即下载，延迟执行</b>
+        <p>即使该 script 标签放置在 head 标签内，依然会等到浏览器解析到 &lt/html&gt 才会去执行 defer 属性的 script 标签内的代码</p>
+      </li>
+      <li>
+        <b>defer 属性只对外部脚本文件才有效</b>
+        <p>若 defer 标签定义的script标签内含有代码（即内部脚本），则不会 “立即下载，延迟执行”，而是立即执行。</p>
+      </li>
+    </ul>
+  </p>
+</body>
+<script>
+  console.log("test");
+</script>
+
+</html>

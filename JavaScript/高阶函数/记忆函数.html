@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>记忆函数</title>
+</head>
+
+<body>
+  <script>
+    let count = 0; //用于记录函数调用次数
+    let fibonacci = function (n) {
+      count++; // 每次调用函数将 count + 1
+      return n < 2 ? n : fibonacci(n - 1) + fibonacci(n - 2);
+    }
+
+
+
+    let memoize = function (fn, resolver) {
+      let cache = {}
+      return function (...args) {
+        // let key = JSON.stringify(args)
+        let key = typeof resolver === 'function' ? resolver.apply(this, args) : JSON.stringify(args)
+        if(!cache.hasOwnProperty(key)){
+          cache[key] = fn.apply(this, args)
+        }else{
+          return cache[key]
+        }
+      }
+    }
+
+    fibonacci = memoize(fibonacci, function () {
+      console.log(arguments);
+      
+    });
+
+    for (let i = 0; i < 10; i++) {
+      console.log(`i=${i}:`, fibonacci(i))
+    }
+
+    console.log('总次数:', count)
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>组合函数</title>
+</head>
+
+<body>
+  <script>
+    let compose = function (...fns) {
+      return function (x) {
+        return fns.reduceRight((args, fn) => {
+          return fn(args)
+        }, x)
+      }
+    }
+
+    function stringToUpper(str) {
+      return str.toUpperCase()
+    }
+
+    function stringReverse(str) {
+      return str.split('').reverse().join('')
+    }
+
+    let s = compose(stringToUpper, stringReverse)
+    s('hello') // OLLEH
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>函数柯里化</title>
+</head>
+
+<body>
+  <script>
+
+    // // 函数柯里化： 把一个函数范围缩小，使得函数更加具体
+    function isType(content, type) {
+      return Object.prototype.toString.call(content) === `[object ${type}]`
+    }
+
+    // 使用柯里化函数使得函数 isType 更加具体
+    function currying(fn, type) {
+      return function (content) {
+        return fn(content, type)
+      }
+    }
+
+    let isString = currying(isType, 'String')
+    let isNumber = currying(isType, 'Number')
+    console.log(isString('1'))
+    console.log(isNumber(1))
+
+    let util = {}
+    let temp = ['Number', 'String', 'Boolean', 'Array', 'Object']
+    temp.forEach(type => {
+      util['is' + type] = currying(isType, type)
+    })
+
+    console.log(util.isString('1'))
+
+
+    // 函数柯里化： 其含义是给函数分步传递参数，每次传递部分参数，并返回一个更具体的函数接收剩下的参数，这中间可嵌套多层这样的接收部分参数的函数，直至返回最后结果
+
+    // 被转换函数，用于检测传入的字符串是否符合正则表达式
+    function checkFun(reg, str) {
+      return reg.test(str);
+    }
+
+    // ES5 写法
+    function currying(fn, args) {
+      var arity = fn.length
+      var args = args || []
+      return function () {
+        var _args = Array.prototype.slice.call(arguments)
+        Array.prototype.unshift.apply(_args, args);
+        if (_args.length < arity) {
+          return currying.call(null, fn, _args)
+        }
+        return fn.apply(null, _args)
+      }
+    }
+
+    // ES6 写法
+    function currying(fn, args = []) {
+      let arity = fn.length
+      return (..._args) => {
+        _args.unshift(...args)
+        if (_args.length < arity) {
+          return currying.call(null, fn, _args)
+        }
+        return fn.call(null, ..._args)
+      }
+    }
+
+    // 转换柯里化
+    let check = currying(checkFun);
+
+    // 产生新的功能函数
+    let checkPhone = check(/^1[34578]\d{9}$/);
+    let checkEmail = check(/^(\w)+(\.\w+)*@(\w)+((\.\w+)+)$/);
+    console.log(checkPhone(18855556666)) // true
+
+
+  </script>
+</body>
+
+</html>

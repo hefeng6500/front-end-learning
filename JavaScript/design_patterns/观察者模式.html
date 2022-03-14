@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>观察者模式</title>
+</head>
+
+<body>
+  <script>
+    // Subject 作为被观察者，向外提供接口 attach 供观察者 Observe 调用
+    // 而观察者 Observe 也会向外提供接口 update 供被观察者在状态变化时进行通知
+    function Subject() {
+      this.state = 0
+      this.observers = []
+    }
+    Subject.prototype = {
+      getState: function () {
+        return this.state
+      },
+      setState: function (state) {
+        this.state = state
+        this.notifyAllObservers()
+      },
+      notifyAllObservers: function () {
+        this.observers.forEach(observer => {
+          observer.update()
+        })
+      },
+      attach: function (observer) {
+        this.observers.push(observer)
+      }
+    }
+
+    function Observer(name, subject) {
+      this.name = name
+      this.subject = subject
+      this.subject.attach(this)
+    }
+    Observer.prototype.update = function () {
+      console.log('state in update,' + 'observer: ' + this.name + ',state: '  +  this.subject.state)
+    }
+
+    var s = new Subject()
+    var o = new Observer('o1', s)
+    var o1 = new Observer('o2', s)
+    var o2 = new Observer('o3', s)
+    console.log(s.getState())
+    s.setState(1)
+
+  </script>
+</body>
+
+</html>

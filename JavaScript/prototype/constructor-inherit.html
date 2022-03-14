@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>constructor-inherit</title>
+</head>
+
+<body>
+  <script>
+    /**
+     * 构造函数继承
+     * */
+    function SuperClass(id) {
+      this.books = ['Javascript', 'html', 'css']
+      this.id = id
+    }
+    SuperClass.prototype.showBooks = function () {
+      console.log(this.books)
+    }
+
+    function SubClass(id) { 
+      SuperClass.call(this, id)
+    }
+
+    var instance1 = new SubClass(10)
+    var instance2 = new SubClass(11)
+
+    instance1.books.push("设计模式")
+    console.log(instance1.books) // ["Javascript", "html", "css", "设计模式"]
+    console.log(instance2.books) // ["Javascript", "html", "css"]
+    console.log(instance1.id) // 10
+    console.log(instance2.id) // 11
+    instance1.showBooks() // Uncaught TypeError: instance1.showBooks is not a function
+
+    /**
+     * 注意： 子类SubClass中，调用SuperClass.call(this, id)，
+     * 是将子类的变量在父类构造函数中执行一遍，由于父类中是给this绑定值，因此子类自然继承父类的共有属性
+     * 缺点： 只涉及构造函数，不涉及原型，若想继承原型上的方法，必须将该方法写在构造函数中，这样就会导致创建多个实例就多次在构造函数中创建该方法，不能够直接在原型上取（不能复用）
+     * 违背了代码复用原则
+    */
+   
+  </script>
+</body>
+
+</html>

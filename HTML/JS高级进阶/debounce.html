@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <button onclick="btnClick()">点击</button>
+
+  <script>
+    function debounce(fn, wait) {
+      let timer = null
+      return function (...args) {
+        clearTimeout(timer)
+        timer = setTimeout(() => {
+          fn.call(this, ...args)
+        }, wait);
+      }
+    }
+
+    function search(a, b, c) {
+      console.log('搜索', a, b, c)
+    }
+    let obj = {
+      test: 1
+    }
+
+    let debounceSearch = debounce(search, 300)
+
+    function btnClick() {
+      debounceSearch.call(obj, 1,2,3)
+    }
+  </script>
+</body>
+
+</html>

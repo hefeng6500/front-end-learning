@@ -1,0 +1,16 @@
+.container{
+  padding: 20px;
+}
+.todolist{
+  margin: 10px 0;
+  width: 300px;
+  padding: 10px;
+  border: 1px solid #1890ff;
+  border-radius: 4px;
+}
+.myInput{
+  width: 200px;
+}
+.btn{
+  margin-left: 10px;
+}

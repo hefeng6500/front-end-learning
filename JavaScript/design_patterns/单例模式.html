@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>单例模式</title>
+</head>
+
+<body>
+  <div id="div1">div1</div>
+  <button id="loginBtn">loginBtn</button>
+  教程地址： https://2443992009.gitbook.io/web-fullstack/she-ji-mo-shi/dan-li-mo-shi
+  <script>
+    // let Singleton = function () {
+    //   this.name = name
+    //   this.instance = null
+    // }
+
+    // Singleton.getInstance = function () {
+    //   if (!this.instance) {
+    //     this.instance = new Singleton()
+    //   }
+    // }
+
+    // let obj1 = Singleton.getInstance()
+    // let obj2 = Singleton.getInstance()
+
+    // console.log('obj1 === obj2', obj1 === obj2) // obj1 === obj2 true
+
+
+
+    // let CreateDiv = (function () {
+    //   let instance
+    //   let CreateDiv = function (html) {
+    //     if (instance) {
+    //       return instance
+    //     }
+    //     this.html = html
+    //     this.init()
+
+    //     return instance = this
+    //   }
+
+    //   CreateDiv.prototype.init = function () {
+    //     var div = document.createElement('div')
+    //     div.innerHTML = this.html
+    //     document.body.appendChild(div)
+    //   }
+
+    //   return CreateDiv
+    // })()
+
+    // let div1 = new CreateDiv('div1')
+    // let div2 = new CreateDiv('div2')
+
+    // console.log('div1 === div2', div1 === div2) // div1 === div2 true
+
+
+    // // 单一职责： 管理全局单例
+    // let ProxySingletonCreateDiv = (function () {
+    //   let instance
+    //   return function (html) {
+    //     if (!instance) {
+    //       instance = new CreateDiv(html)
+    //     }
+    //     return instance
+    //   }
+    // })()
+
+    // // 单一职责： 创建对象
+    // let CreateDiv = (function () {
+    //   let CreateDiv = function (html) {
+    //     this.html = html
+    //     this.init()
+    //   }
+
+    //   CreateDiv.prototype.init = function () {
+    //     var div = document.createElement('div')
+    //     div.innerHTML = this.html
+    //     document.body.appendChild(div)
+    //   }
+    //   return CreateDiv
+    // })()
+
+    // let div1 = new ProxySingletonCreateDiv('div1')
+    // let div2 = new ProxySingletonCreateDiv('div2')
+
+    // console.log('div1 === div2', div1 === div2) // div1 === div2 true
+
+    // 通用惰性单例
+    let getSingle = function (fn) {
+      var result;
+      return function () {
+        return result || (result = fn.apply(this, arguments));
+      };
+    };
+
+    var createLoginLayer = function () {
+      var div = document.createElement('div');
+      div.innerHTML = '我是登录浮窗';
+      div.style.display = 'none';
+      document.body.appendChild(div);
+      return div;
+    };
+
+    let createSingleLoginLayer = getSingle(createLoginLayer)
+
+    document.getElementById('loginBtn').onclick = function () {
+      var loginLayer = createSingleLoginLayer();
+      loginLayer.style.display = 'block';
+    };
+
+
+
+
+
+
+
+
+    // var bindEvent = getSingle(function () {
+    //   document.getElementById('div1').onclick = function () {
+    //     alert('click');
+    //   };
+    //   return true;
+    // });
+    // var render = function () {
+    //   console.log('开始渲染列表');
+    //   bindEvent();
+    // };
+    // render();
+    // render();
+    // render();
+  </script>
+</body>
+
+</html>

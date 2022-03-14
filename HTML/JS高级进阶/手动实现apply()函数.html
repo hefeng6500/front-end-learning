@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>js高级进阶——手动实现apply()函数</title>
+</head>
+
+<body>
+  <script>
+    // 首先看下apply()
+    var obj = {
+      name: 'Nicholas S.Zakas',
+      age: 41,
+      from: 'America',
+      introduce: function (name, from) {
+        console.log('hello, everyone, i am ' + name, 'i am from ' + from)
+      }
+    }
+
+    var obj2 = {}
+
+    obj.introduce.apply(obj2, ['Evan You', 'china']) // hello, everyone, i am Evan You i am from china
+
+    Function.prototype._apply = function (context = window, arr) {
+      var result
+      context.fn = this
+      if (!arr) { // 考虑无参数时
+        context.fn()
+      } else {
+        var args = []
+        for (var i = 0; i < arr.length; i++) {
+          args.push('arr[' + i + ']')
+        }
+        result = eval('context.fn(' + args + ')')
+      }
+      delete context.fn
+      return result
+    }
+
+    obj.introduce._apply(obj2, ['Evan You', 'china']) // hello, everyone, i am Evan You i am from china
+
+    // ECMAScript6的实现
+    Function.prototype._es6apply = function (context = window, args) {
+      let result
+      context.fn = this
+      if (!args) {
+        context.fn()
+      } else {
+        result = context.fn(...args)
+        delete context.fn
+      }
+      return result
+    }
+
+    obj.introduce._es6apply(obj2, ['Evan You', 'china']) // hello, everyone, i am Evan You i am from china
+  </script>
+</body>
+
+</html>

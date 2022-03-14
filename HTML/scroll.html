@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    #d1 {
+      width: 500px;
+      height: 500px;
+      background: #ddd;
+      overflow: scroll;
+    }
+    #d2 {
+      width: 300px;
+      height: 3000px;
+    }
+    #d3 {
+      margin-top: 1000px;
+      background: red;
+    }
+  </style>
+  <script src="./js/jquery-3.4.1.js"></script>
+</head>
+
+<body>
+
+  <button id="btn">点击出现</button>
+  <div id="d1">
+    <div id="d2">
+      <p id="d3">前端开发精髓</p>
+    </div>
+  </div>
+
+  <script>
+    let d1 = document.getElementById('d1')
+    let d2 = document.getElementById('d2')
+    let d3 = document.getElementById('d3')
+
+    let clientHeight = d1.clientHeight
+    console.log('clientHeight', clientHeight)
+    console.log('offsetTop', d3.offsetTop)
+
+    d1.onscroll = () => {
+      let clientHeight = d1.clientHeight
+      let scrollTop = d1.scrollTop
+      let offsetTop = d3.offsetTop
+
+      let into = offsetTop - scrollTop > 0 && offsetTop - scrollTop < clientHeight
+      if (into) {
+        console.log('我在可视区域内')
+      }
+    }
+
+    let btn = document.getElementById('btn')
+    btn.onclick = () => {
+      // 方法一： 使用 scrollIntoView()
+      // d3.scrollIntoView({
+      //   behavior: 'smooth',
+      //   block: 'center'
+      // })
+
+      // 方法二：定时器
+      let scroll = 100
+      let offsetTop = d3.offsetTop
+      let clientHeight = d1.clientHeight
+
+      // 总长度
+      let scrollLength = offsetTop - 100
+      // 总花费200ms
+      let time = 200
+
+      let step = scrollLength / time
+
+      let interval = setInterval(() => {
+        if (d1.scrollTop >= scrollLength) {
+          clearInterval(interval)
+        }
+        d1.scrollTop += 50
+      }, 1);
+    }
+  </script>
+</body>
+
+</html>

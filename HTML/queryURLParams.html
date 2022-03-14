@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    function queryURLParams(url) {
+      let result = {},
+        reg1 = /([^?=&#]+)=([^?=&#]+)/g,
+        reg2 = /#([^?=&#]+)/g;
+      url.replace(reg1, (n, x, y) => result[x] = y)
+      url.replace(reg2, (n, x) => result['HASH'] = x)
+      return result
+    }
+
+    let url = 'http://www.baidu.com/index?name=baidu&age=35#333'
+    let paramsObj = queryURLParams(url)
+    console.log(paramsObj)
+  </script>
+</body>
+
+</html>

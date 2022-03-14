@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>constructor-class-inherit</title>
+</head>
+<body>
+  <script>
+
+
+    /**
+     * 
+     * 组合继承： 构造函数继承 + 类式继承
+     * 缺点： 子类在使用构造函数时继承了一遍父类的构造函数，而且实现子类原型的类式继承时又调用了一次父类的构造函数
+     * SuperClass.call(this, name) 这行代码使得子类既继承了父类属性有有自己的作用域，不会因类式继承导致的属性污染问题
+    */
+   
+    function SuperClass(name) {
+      this.books = ['Javascript', 'html', 'css']
+      this.name = name
+    }
+    SuperClass.prototype.getName = function () {
+      return this.name
+    }
+
+    function SubClass(name, time) { 
+      SuperClass.call(this, name)
+      this.time = time
+    }
+    SubClass.prototype = new SuperClass()
+    SubClass.prototype.getTime = function () {
+      return this.time
+    }
+
+    var instance1 = new SubClass('JS book', 2014)
+    var instance2 = new SubClass('css book', 2015) 
+
+    instance1.books.push('设计模式')
+    console.log(instance1.books) // ["Javascript", "html", "css", "设计模式"]
+    console.log(instance1.getName()) // JS book
+    console.log(instance1.getTime()) // 2014
+     
+    console.log(instance2.books) // ["Javascript", "html", "css"]
+    console.log(instance2.getName()) // css book
+    console.log(instance2.getTime()) // 2015
+  </script>
+</body>
+</html>
