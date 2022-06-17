@@ -1,5 +1,11 @@
 # Promise
 
+```
+npm i
+npm run dev
+npm run test
+```
+
 Promises/A+: https://promisesaplus.com/
 
 [译]Promise/A+ 规范: https://zhuanlan.zhihu.com/p/143204897
@@ -217,7 +223,7 @@ function resolvePromise(promise2, x, resolve, reject) {
           (y) => {
             if (called) return;
             called = true;
-            resolve(y);
+            resolvePromise(promise2, y, resolve, reject);
           },
           (r) => {
             if (called) return;
@@ -372,5 +378,3 @@ let promise = new Promise(() => {
 **called**
 
 设置加锁，防止别人的 promise 不遵守 "状态改变后不可再修改"的承诺，可以多次修改状态
-
-
