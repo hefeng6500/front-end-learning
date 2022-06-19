@@ -1,5 +1,3 @@
-'use strict';
-
 // 1、基本架构：
 //   状态
 //   then
@@ -13,7 +11,7 @@
 //   then 函数递归返回常量结果，供下个 then 使用
 //   考虑 then 成功的回调为 null 的情况
 
-class Promise$1 {
+class Promise {
   static PENDING = "pending";
   static RESOLVED = "resolved";
   static REJECTED = "rejected";
@@ -21,7 +19,7 @@ class Promise$1 {
   static resolve() {}
 
   constructor(executor) {
-    this.state = Promise$1.PENDING;
+    this.state = Promise.PENDING;
     this.value = undefined;
     this.reason = undefined;
 
@@ -29,19 +27,19 @@ class Promise$1 {
     this.onRejectedCallbacks = [];
 
     const resolve = (value) => {
-      if (value instanceof Promise$1) {
+      if (value instanceof Promise) {
         return value.then(resolve, reject);
       }
 
-      if (this.state === Promise$1.PENDING) {
-        this.state = Promise$1.RESOLVED;
+      if (this.state === Promise.PENDING) {
+        this.state = Promise.RESOLVED;
         this.value = value;
 
         this.onResolvedCallbacks.forEach((fn) => fn());
       }
     };
     const reject = (reason) => {
-      this.state = Promise$1.REJECTED;
+      this.state = Promise.REJECTED;
       this.reason = reason;
       this.onRejectedCallbacks.forEach((fn) => fn());
     };
@@ -63,8 +61,8 @@ class Promise$1 {
             throw reason;
           };
 
-    let promise = new Promise$1((resolve, reject) => {
-      if (this.state === Promise$1.PENDING) {
+    let promise = new Promise((resolve, reject) => {
+      if (this.state === Promise.PENDING) {
         this.onResolvedCallbacks.push(() => {
           setTimeout(() => {
             try {
@@ -87,7 +85,7 @@ class Promise$1 {
         });
       }
 
-      if (this.state === Promise$1.RESOLVED) {
+      if (this.state === Promise.RESOLVED) {
         setTimeout(() => {
           try {
             let x = onFulfilled(this.value);
@@ -98,7 +96,7 @@ class Promise$1 {
         });
       }
 
-      if (this.state === Promise$1.REJECTED) {
+      if (this.state === Promise.REJECTED) {
         setTimeout(() => {
           try {
             let x = onRejected(this.reason);
@@ -162,9 +160,9 @@ function resolvePromise(promise, x, resolve, reject) {
   }
 }
 
-const p = new Promise$1((resolve, reject) => {
+const p = new Promise((resolve, reject) => {
   resolve(
-    new Promise$1((resolve) => {
+    new Promise((resolve) => {
       resolve(1);
     })
   );
@@ -186,13 +184,13 @@ p.then((res) => {
     console.log("链式调用3: ", res);
   });
 
-  Promise$1.deferred = function () {
+  Promise.deferred = function () {
     let dfd = {};
-    dfd.promise = new Promise$1((resolve, reject) => {
+    dfd.promise = new Promise((resolve, reject) => {
       dfd.resolve = resolve;
       dfd.reject = reject;
     });
     return dfd;
   };
   
-  module.exports = Promise$1;
+  module.exports = Promise;

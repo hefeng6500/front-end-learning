@@ -1,5 +1,5 @@
 export default {
-  input: "promise3.js",
+  input: "promise4.js",
   output: {
     file: "promise.js",
     format: "cjs",
