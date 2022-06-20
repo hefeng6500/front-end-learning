@@ -16,7 +16,17 @@ class Promise {
   static RESOLVED = "resolved";
   static REJECTED = "rejected";
 
-  static resolve() {}
+  static resolve(value) {
+    return new Promise((resolve, reject) => {
+      resolve(value);
+    });
+  }
+
+  static reject(reason) {
+    return new Promise((resolve, reject) => {
+      reject(reason);
+    });
+  }
 
   constructor(executor) {
     this.state = Promise.PENDING;
@@ -110,6 +120,103 @@ class Promise {
 
     return promise;
   }
+
+  catch(onRejected) {
+    return this.then(null, onRejected);
+  }
+
+  all(arr) {
+    let count = 0;
+    let result = [];
+
+    return new Promise((resolve, reject) => {
+      for (let i = 0; i < arr.length; i++) {
+        Promise.resolve(arr[i])
+          .then((res) => {
+            result[i] = res;
+            if (++count === arr.length) {
+              resolve(res);
+            }
+          })
+          .catch((error) => {
+            reject(error);
+          });
+      }
+    });
+  }
+
+  race(arr) {
+    return new Promise((resolve, reject) => {
+      arr.forEach((item) => Promise.resolve(item).then(resolve, reject));
+    });
+  }
+
+  finally(callback) {
+    return this.then(
+      (value) => {
+        return Promise.resolve(callback()).then(() => value);
+      },
+      (reason) => {
+        return Promise.resolve(callback()).then(() => {
+          throw reason;
+        });
+      }
+    );
+  }
+
+  allSettled(arr) {
+    let count = 0;
+    let result = [];
+
+    return new Promise((resolve, reject) => {
+      const fn = (i, data) => {
+        if (count === arr.length) {
+          resolve(result);
+        }
+
+        result[i] = data;
+        count++;
+      };
+
+      for (let i = 0; i < arr.length; i++) {
+        Promise.resolve(arr[i])
+          .then((res) => {
+            fn(i, { status: "fulfilled", value: res });
+          })
+          .catch((error) => {
+            fn(i, { status: "rejected", reason: error });
+          });
+      }
+    });
+  }
+
+  // from Node Util.promisify
+  promisify(f) {
+    return function (...args) {
+      return new Promise((resolve, reject) => {
+        function callback(error, result) {
+          if (error) {
+            reject(error);
+          } else {
+            resolve(result);
+          }
+        }
+
+        args.push(callback);
+
+        f.call(this, ...args);
+      });
+    };
+  }
+
+  // from Node Util.promisifyAll
+  promisifyAll(obj) {
+    for (let key in obj) {
+      if (typeof obj[key] === "function") {
+        obj[key] = this.promisify(obj[key]);
+      }
+    }
+  }
 }
 
 function resolvePromise(promise, x, resolve, reject) {
@@ -161,36 +268,23 @@ function resolvePromise(promise, x, resolve, reject) {
 }
 
 const p = new Promise((resolve, reject) => {
-  resolve(
-    new Promise((resolve) => {
-      resolve(1);
-    })
-  );
+  reject(1);
 });
 
-p.then((res) => {
-  console.log(res + " succeed");
-  return res;
-})
-  .then((res) => {
-    console.log("链式调用1: ", res);
-    return res;
-  })
-  .then((res) => {
-    console.log("链式调用2: ", res);
-    return res;
-  })
-  .then((res) => {
-    console.log("链式调用3: ", res);
-  });
+p.catch((error) => {
+  console.log("error + ", error);
+  return error;
+}).then((res) => {
+  console.log(res);
+});
 
-  Promise.deferred = function () {
-    let dfd = {};
-    dfd.promise = new Promise((resolve, reject) => {
-      dfd.resolve = resolve;
-      dfd.reject = reject;
-    });
-    return dfd;
-  };
-  
-  module.exports = Promise;
+Promise.deferred = function () {
+  let dfd = {};
+  dfd.promise = new Promise((resolve, reject) => {
+    dfd.resolve = resolve;
+    dfd.reject = reject;
+  });
+  return dfd;
+};
+
+module.exports = Promise;
