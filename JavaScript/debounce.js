@@ -5,6 +5,7 @@ function debounce(fn, wait) {
 
     time = setTimeout(() => {
       fn.call(this, ...args);
+      time = null;
     }, wait);
   };
 }
@@ -12,4 +13,4 @@ function debounce(fn, wait) {
 function test() {
   console.log(123);
 }
-let btnClick = debounce(test, 1000)
+let btnClick = debounce(test, 1000);

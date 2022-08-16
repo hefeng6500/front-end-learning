@@ -1,10 +1,14 @@
-function throttle(callback, wait) {
-  let start = Date.now();
-  return function (...args) {
-    let end = Date.now();
-    if (end - start >= wait) {
-      callback.call(this, ...args);
-      start = Date.now();
+function throttle(func, wait, immediate = true) {
+  var context, args;
+  var previous = 0;
+
+  return function () {
+    var now = +new Date();
+    context = this;
+    args = arguments;
+    if (now - previous > wait) {
+      func.apply(context, args);
+      previous = now;
     }
   };
 }
